@@ -19,11 +19,9 @@ public class Main {
         try
         {
             scanner = new Scanner(file);
-            int i = 0;
-            while (/*scanner.hasNextLine()*/ i < 30)//TODO
+            while (scanner.hasNextLine())
             {
                 app.insert(scanner.next(), scanner.next(), scanner.next(), scanner.next(), scanner.next(), scanner.next(), scanner.next(), scanner.next(), scanner.next(), scanner.next());
-                i++;
             }
         }
         catch (Exception e)
@@ -33,6 +31,8 @@ public class Main {
 
         try {
             getRemHostRequsets();
+            getUserActiv();
+            getDataType();
         }catch (Exception e)
         {
             e.printStackTrace();
@@ -63,10 +63,71 @@ public class Main {
         }
     }
 
+    private static void getUserActiv() throws SQLException
+    {
+        String url = "jdbc:sqlite:/Users/Fhaelean/Desktop/log/lab1.db";
+        Connection conn = DriverManager.getConnection(url);
+
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(userAct);
+
+        TreeMap<Integer, String> users = new TreeMap<>();
+        while (rs.next())
+        {
+            users.put(rs.getInt("amount"), rs.getString("username"));
+        }
+
+        Set set = users.entrySet();
+        Iterator iterator = set.iterator();
+
+        while(iterator.hasNext()) {
+            Map.Entry map = (Map.Entry)iterator.next();
+            System.out.println("User: " + map.getValue() + " entries: " + map.getKey());
+        }
+    }
+
+    private static void getDataType() throws SQLException
+    {
+        String url = "jdbc:sqlite:/Users/Fhaelean/Desktop/log/lab1.db";
+        Connection conn = DriverManager.getConnection(url);
+
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(dataType);
+
+        TreeMap<Integer, String> data = new TreeMap<>();
+        while (rs.next())
+        {
+            data.put(rs.getInt("amount"), rs.getString("data_type"));
+        }
+
+        Set set = data.entrySet();
+        Iterator iterator = set.iterator();
+
+        while(iterator.hasNext()) {
+            Map.Entry map = (Map.Entry)iterator.next();
+            System.out.println("Data: " + map.getValue() + " entries: " + map.getKey());
+        }
+    }
+
     private static final String remHosts =
             "SELECT COUNT(*) amount,remotehost\n" +
             "FROM logData\n" +
             "GROUP BY remotehost\n" +
             "ORDER BY amount DESC\n" +
             "LIMIT 10 OFFSET 0";
+
+    private static final String userAct =
+            "SELECT COUNT(*) amount,username\n" +
+            "FROM logData\n" +
+            "GROUP BY username\n" +
+            "ORDER BY amount DESC\n" +
+            "LIMIT 10 OFFSET 0";
+
+    private static final String dataType =
+            "SELECT COUNT(*) amount,data_type\n" +
+            "FROM logData\n" +
+            "GROUP BY data_type\n" +
+            "ORDER BY amount DESC\n" +
+            "LIMIT 10 OFFSET 0";
+
 }

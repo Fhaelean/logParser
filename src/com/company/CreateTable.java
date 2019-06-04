@@ -13,16 +13,16 @@ public class CreateTable {
 
         // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS logData (\n"
-                + " time_in text,\n"
-                + " elapsed text,\n"
-                + " remotehost text,\n"
-                + " code_status text,\n"
-                + " bytes text,\n"
-                + " method text,\n"
-                + " url text,\n"
-                + " username text,\n"
-                + " peerstatus text,\n"
-                + " data_type text \n"
+                + " time_in text NOT NULL,\n"
+                + " elapsed text NOT NULL,\n"
+                + " remotehost text NOT NULL,\n"
+                + " code_status text NOT NULL,\n"
+                + " bytes text NOT NULL,\n"
+                + " method text NOT NULL,\n"
+                + " url text NOT NULL,\n"
+                + " username text NOT NULL,\n"
+                + " peerstatus text NOT NULL,\n"
+                + " data_type text NOT NULL \n"
                 + ");";
         try{
             Connection conn = DriverManager.getConnection(url);
